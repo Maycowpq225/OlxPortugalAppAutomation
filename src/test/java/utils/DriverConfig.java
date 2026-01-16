@@ -26,8 +26,7 @@ public class DriverConfig {
     private UiAutomator2Options setUpAllCapabilities() {
         return new UiAutomator2Options()
                 .setUdid("emulator-5554")
-                .setAppPackage("com.google.android.youtube")
-                .setAppActivity("com.google.android.apps.youtube.app.WatchWhileActivity");
+                .setAppPackage("com.fixeads.olxportugal");
     }
 
     public void defaultConfig() {

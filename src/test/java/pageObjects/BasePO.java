@@ -1,10 +1,11 @@
-package po;
+package pageObjects;
 
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
@@ -17,6 +18,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class BasePO {
     public AndroidDriver driver;
@@ -26,6 +28,16 @@ public class BasePO {
         driver = DriverConfig.shared().driver;
         wait = DriverConfig.shared().wait;
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+    }
+
+    public void clickIfElementIsVisible(WebElement element, int waitingSeconds) {
+        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(waitingSeconds));
+        try{
+            element.click();
+        } catch (NoSuchElementException ex) {
+            System.out.println("Button not found.");
+        }
+        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
     public WebElement waitElementIsVisible(WebElement element) {
