@@ -27,10 +27,13 @@ public class ExplorerPO extends BasePO {
     @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"com.android.permissioncontroller:id/permission_allow_foreground_only_button\")")
     private WebElement btnWhileUsingTheApp;
 
+    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Todas as categorias\")")
+    private WebElement btnAllCategories;
+
     public void prepareAppToBeUsed() {
-        clickIfElementIsVisible(btnAccept, 5);
-        clickIfElementIsVisible(btnSkip, 3);
-        clickIfElementIsVisible(btnWhileUsingTheApp, 3);
+        clickIfElementIsVisible(btnAccept, 15);
+        clickIfElementIsVisible(btnSkip, 15);
+        clickIfElementIsVisible(btnWhileUsingTheApp, 15);
     }
 
     public void olxAppIsOpenAndReady() {
@@ -45,5 +48,9 @@ public class ExplorerPO extends BasePO {
     public boolean postsAreBeingRecommended() {
         scrollDirection("down", 2);
         return recommendedCards.size() > 1;
+    }
+
+    public void clicksOnAllCategoriesButton() {
+        waitElementIsClickableAndClick(btnAllCategories);
     }
 }
