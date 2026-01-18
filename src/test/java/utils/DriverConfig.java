@@ -1,9 +1,9 @@
 package utils;
 
-
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,27 +19,40 @@ public class DriverConfig {
         if (sharedInstance == null) {
             sharedInstance = new DriverConfig();
         }
-
         return sharedInstance;
     }
 
     private UiAutomator2Options setUpAllCapabilities() {
         return new UiAutomator2Options()
-                .setUdid("emulator-5554")
+                .setAutomationName("UiAutomator2")
+                .setPlatformName("Android")
+                .setPlatformVersion("7.1.1") // ajuste se o emulador for outro
+                .setDeviceName("Android Emulator")
+                .setUdid("emulator-5554") // padrão do emulador no CI
                 .setAppPackage("com.fixeads.olxportugal");
+                // se for app já instalado, use isso em vez de setApp():
+                // .setAppPackage("com.fixeads.olxportugal")
+                // .setAppActivity("com.seuapp.MainActivity")
     }
 
     public void defaultConfig() {
         try {
-            driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), this.setUpAllCapabilities());
-            this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(15));
-            this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+            driver = new AndroidDriver(
+                    new URI("http://127.0.0.1:4723").toURL(),
+                    setUpAllCapabilities()
+            );
+
+            wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
         } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void quitDriver() {
-        this.driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
