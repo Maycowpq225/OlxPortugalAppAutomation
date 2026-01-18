@@ -32,7 +32,7 @@ jobs:
       - name: Start Android Emulator + Appium + Run tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
-          api-level: 25              # Android 7.1.1
+          api-level: 30
           target: default
           arch: x86_64
           emulator-options: -no-window -no-audio -no-snapshot -gpu swiftshader_indirect
