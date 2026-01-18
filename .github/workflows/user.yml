@@ -1,5 +1,4 @@
-name: Run API Tests - User Endpoint
-
+name: Run Appium Tests - User Endpoint
 run-name: User Endpoint
 
 on:
@@ -10,7 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Appium + Tests
+    name: Emulator + Appium + Tests
 
     steps:
       - name: Checkout repository
@@ -30,11 +29,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Install and Run Appium Server
-        uses: moatazeldebsy/appium-server-gitHub-action@V1.0.4
+      - name: Start Android Emulator + Appium + Run tests
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 25              # Android 7.1.1
+          target: default
+          arch: x86_64
+          emulator-options: -no-window -no-audio -no-snapshot -gpu swiftshader_indirect
+          disable-animations: true
+          script: |
+            adb devices
 
-      - name: Run User Tests
-        run: mvn clean test -Dcucumber.filter.tags="@User"
+            # Instala Appium e driver UiAutomator2 (Appium 2)
+            npm i -g appium
+            appium driver install uiautomator2
+
+            # Sobe Appium em background
+            appium --address 127.0.0.1 --port 4723 --log appium.log &
+            sleep 5
+
+            # Roda os testes
+            mvn clean test -Dcucumber.filter.tags="@User"
 
       - name: Generate Cucumber Report
         if: always()
@@ -50,3 +65,10 @@ jobs:
         with:
           name: cucumber-report
           path: cucumber-report
+
+      - name: Upload Appium log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-log
+          path: appium.log
