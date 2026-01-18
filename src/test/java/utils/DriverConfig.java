@@ -27,11 +27,8 @@ public class DriverConfig {
                 .setAutomationName("UiAutomator2")
                 .setPlatformName("Android")
                 .setDeviceName("Android Emulator")
-                .setUdid("emulator-5554") // padrão do emulador no CI
+                .setUdid("emulator-5554")
                 .setAppPackage("com.fixeads.olxportugal");
-                // se for app já instalado, use isso em vez de setApp():
-                // .setAppPackage("com.fixeads.olxportugal")
-                // .setAppActivity("com.seuapp.MainActivity")
     }
 
     public void defaultConfig() {
