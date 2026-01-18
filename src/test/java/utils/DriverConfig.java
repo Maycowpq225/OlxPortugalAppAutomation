@@ -26,7 +26,6 @@ public class DriverConfig {
         return new UiAutomator2Options()
                 .setAutomationName("UiAutomator2")
                 .setPlatformName("Android")
-                .setPlatformVersion("7.1.1") // ajuste se o emulador for outro
                 .setDeviceName("Android Emulator")
                 .setUdid("emulator-5554") // padrão do emulador no CI
                 .setAppPackage("com.fixeads.olxportugal");
