@@ -1,0 +1,54 @@
+name: Run API Tests - User Endpoint
+
+run-name: User Endpoint
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+
+      - name: Run User Tests
+        run: mvn clean test -Dcucumber.filter.tags="@User"
+
+
+      - name: Generate Cucumber Report
+        if: always()
+        run: |
+            echo "📁 Conteúdo da pasta target:"
+            ls -R target || true
+            mkdir -p cucumber-report
+            cp -r target/cucumber-reports/* cucumber-report/ || true
+
+      - name: Upload Cucumber Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+                name: cucumber-report
+                path: cucumber-report
