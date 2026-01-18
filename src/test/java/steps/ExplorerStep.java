@@ -26,6 +26,11 @@ public class ExplorerStep {
         explorerPO.selectRecommendedPost();
     }
 
+    @When("the user clicks on All Categories button")
+    public void clicksOnAllCategoriesButton() {
+        explorerPO.clicksOnAllCategoriesButton();
+    }
+
     @Then("the app should recommend posts for the user")
     public void the_app_should_recommend_posts_for_the_user() {
         boolean state = explorerPO.postsAreBeingRecommended();

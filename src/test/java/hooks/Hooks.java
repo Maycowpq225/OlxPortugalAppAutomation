@@ -13,6 +13,6 @@ public class Hooks {
 
     @After
     public static void tearDown() {
-        //DriverConfig.shared().quitDriver();
+        DriverConfig.shared().quitDriver();
     }
 }

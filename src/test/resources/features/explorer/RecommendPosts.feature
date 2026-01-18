@@ -1,7 +1,7 @@
 Feature: Recommend Posts
 
   @RecommendPosts @E2E @Test_001 @Regression
-  Scenario: Search for a video
+  Scenario: Recommend posts are displayed
     Given the app is open and ready to use
     When the user is on the Explore Page
     Then the app should recommend posts for the user
