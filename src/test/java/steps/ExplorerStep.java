@@ -7,7 +7,7 @@ import pageObjects.ExplorerPO;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ExplorerSteps {
+public class ExplorerStep {
 
     ExplorerPO explorerPO = new ExplorerPO();
 
@@ -21,9 +21,14 @@ public class ExplorerSteps {
         explorerPO.olxAppIsOpenAndReady();
     }
 
-    @Then("the app should reccomend posts for the user")
-    public void the_app_should_reccomend_posts_for_the_user() {
-        boolean state = explorerPO.postsAreBeingReccomended();
+    @When("the user selects a recommended post")
+    public void the_user_selects_a_recommended_post() {
+        explorerPO.selectRecommendedPost();
+    }
+
+    @Then("the app should recommend posts for the user")
+    public void the_app_should_recommend_posts_for_the_user() {
+        boolean state = explorerPO.postsAreBeingRecommended();
         assertTrue(state, "Posts are being recommended");
     }
 }

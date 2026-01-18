@@ -32,7 +32,7 @@ public class BasePO {
 
     public void clickIfElementIsVisible(WebElement element, int waitingSeconds) {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(waitingSeconds));
-        try{
+        try {
             element.click();
         } catch (NoSuchElementException ex) {
             System.out.println("Button not found.");
@@ -49,6 +49,7 @@ public class BasePO {
         DriverConfig.shared().wait.until(ExpectedConditions.elementToBeClickable(element));
         return element;
     }
+
     public WebElement waitElementIsClickableAndClick(WebElement element, int timeoutSeconds) {
         StopWatch timer = new StopWatch();
         timer.start();
@@ -66,6 +67,10 @@ public class BasePO {
         }
 
         return element;
+    }
+
+    public void waitElementIsClickableAndClick(WebElement element) {
+        DriverConfig.shared().wait.until(ExpectedConditions.elementToBeClickable(element)).click();
     }
 
     public WebElement findElementByText(String text) {
@@ -113,7 +118,7 @@ public class BasePO {
     /**
      * Used for scroll down and up
      *
-     * @param direction scroll goes up or down
+     * @param direction   scroll goes up or down
      * @param scrollTimes How many times the scroll will be done
      */
     protected void scrollDirection(String direction, int scrollTimes) {
@@ -126,7 +131,7 @@ public class BasePO {
         for (int i = 0; i <= scrollTimes; i++) {
             PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
             Sequence swipe = new Sequence(finger, 1);
-            switch (direction.toLowerCase()){
+            switch (direction.toLowerCase()) {
                 case "up" -> {
                     swipe.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), widthCentral, topPosition)); // start point
                     swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));

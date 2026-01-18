@@ -37,8 +37,13 @@ public class ExplorerPO extends BasePO {
         waitElementIsVisible(fieldWhatYouLookFor);
     }
 
-    public boolean postsAreBeingReccomended() {
-        scrollDirection("down", 3);
+    public void selectRecommendedPost() {
+        scrollDirection("down", 1);
+        waitElementIsClickableAndClick(recommendedCards.getFirst());
+    }
+
+    public boolean postsAreBeingRecommended() {
+        scrollDirection("down", 2);
         return recommendedCards.size() > 1;
     }
 }
