@@ -1,29 +1,25 @@
-name: Run API Tests - User Endpoint
-
+name: Run Appium Tests - User Endpoint
 run-name: User Endpoint
 
 on:
-  push:
-    branches: [ develop ]
   pull_request:
-    branches: [ develop ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Emulator + Appium + Tests
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
-
+          java-version: "21"
+          distribution: "temurin"
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -33,22 +29,49 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Start Android Emulator + Appium + Run tests
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: default
+          arch: x86_64
+          emulator-options: -no-window -no-audio -no-snapshot -gpu swiftshader_indirect
+          disable-animations: true
+          script: |
+            adb devices
+            
+            # Install the app (APK split)
+            adb install-multiple apps/base.apk apps/split_config.x86_64.apk apps/split_config.xxhdpi.apk
 
-      - name: Run User Tests
-        run: mvn clean test -Dcucumber.filter.tags="@User"
+            # Install Appium and the driver UiAutomator2
+            npm i -g appium
+            appium driver install uiautomator2
 
+            # Start Appium in background
+            appium --address 127.0.0.1 --port 4723 --log appium.log &
+            sleep 5
+
+            # Run tests
+            mvn clean test -Dcucumber.filter.tags="@User"
 
       - name: Generate Cucumber Report
         if: always()
         run: |
-            echo "📁 Conteúdo da pasta target:"
-            ls -R target || true
-            mkdir -p cucumber-report
-            cp -r target/cucumber-reports/* cucumber-report/ || true
+          echo "Conteúdo da pasta target:"
+          ls -R target || true
+          mkdir -p cucumber-report
+          cp -r target/cucumber-reports/* cucumber-report/ || true
 
       - name: Upload Cucumber Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-                name: cucumber-report
-                path: cucumber-report
+          name: cucumber-report
+          path: cucumber-report
+
+      - name: Upload Appium log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-log
+          path: appium.log

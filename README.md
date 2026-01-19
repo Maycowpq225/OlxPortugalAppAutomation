@@ -1,5 +1,5 @@
 # OlxPortugalAppAutomation
-Project created in order to automate tests from Olx Portugal App, focusing mainly on Android Platform.
+Project created in order to automate tests from Olx Portugal App, focusing only on Android Platform.
 
 # Main tools used:
 [![Java 21](https://img.shields.io/badge/Java-v21+-yellow.svg)](https://www.oracle.com/ie/java/technologies/downloads/#java21)

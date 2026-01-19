@@ -8,6 +8,6 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "steps,hooks")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-report.html")
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Regression")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@E2E")
 public class TestRunner {
 }

@@ -23,16 +23,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class BasePO {
-    public AndroidDriver driver;
-    public WebDriverWait wait;
+    protected AndroidDriver driver;
+    protected WebDriverWait wait;
 
-    public BasePO() {
-        driver = DriverConfig.shared().driver;
-        wait = DriverConfig.shared().wait;
+    protected BasePO() {
+        driver = DriverConfig.shared().getDriver();
+        wait = DriverConfig.shared().getWait();
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    public void clickIfElementIsVisible(WebElement element, int waitingSeconds) {
+    protected void clickIfElementIsVisible(WebElement element, int waitingSeconds) {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(waitingSeconds));
         try {
             element.click();
@@ -42,17 +42,17 @@ public class BasePO {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
-    public WebElement waitElementIsVisible(WebElement element) {
-        DriverConfig.shared().wait.until(ExpectedConditions.visibilityOf(element));
+    protected WebElement waitElementIsVisible(WebElement element) {
+        this.wait.until(ExpectedConditions.visibilityOf(element));
         return element;
     }
 
-    public WebElement waitElementIsClickable(WebElement element) {
-        DriverConfig.shared().wait.until(ExpectedConditions.elementToBeClickable(element));
+    protected WebElement waitElementIsClickable(WebElement element) {
+        this.wait.until(ExpectedConditions.elementToBeClickable(element));
         return element;
     }
 
-    public WebElement waitElementIsClickableAndClick(WebElement element, int timeoutSeconds) {
+    protected WebElement waitElementIsClickableAndClick(WebElement element, int timeoutSeconds) {
         StopWatch timer = new StopWatch();
         timer.start();
         while (timer.getTime(TimeUnit.SECONDS) < timeoutSeconds) {
@@ -71,12 +71,12 @@ public class BasePO {
         return element;
     }
 
-    public void waitElementIsClickableAndClick(WebElement element) {
-        DriverConfig.shared().wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+    protected void waitElementIsClickableAndClick(WebElement element) {
+        this.wait.until(ExpectedConditions.elementToBeClickable(element)).click();
     }
 
-    public WebElement findElementByText(String text) {
-        return DriverConfig.shared().driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"" + text + "\")"));
+    protected WebElement findElementByText(String text) {
+        return this.driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"" + text + "\")"));
     }
 
     /**
@@ -153,7 +153,7 @@ public class BasePO {
         }
     }
 
-    public WebElement scrollToElement(WebElement element, int secondsSeekingElement) {
+    protected WebElement scrollToElement(WebElement element, int secondsSeekingElement) {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         StopWatch timer = new StopWatch();
         timer.start();
@@ -171,7 +171,7 @@ public class BasePO {
         throw new NoSuchElementException("Element not found");
     }
 
-    public WebElement scrollToElement(By locator, int secondsSeekingElement) {
+    protected WebElement scrollToElement(By locator, int secondsSeekingElement) {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         StopWatch timer = new StopWatch();
         timer.start();

@@ -5,8 +5,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class ExplorerPO extends BasePO {
 
     @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Anúncios recomendados\")")
