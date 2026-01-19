@@ -12,8 +12,17 @@ import java.time.Duration;
 public class DriverConfig {
 
     private static DriverConfig sharedInstance;
-    public AndroidDriver driver;
-    public WebDriverWait wait;
+
+    private final ThreadLocal<AndroidDriver> driver = new ThreadLocal<>();
+    private final ThreadLocal<WebDriverWait> wait = new ThreadLocal<>();
+
+    public AndroidDriver getDriver() {
+        return driver.get();
+    }
+
+    public WebDriverWait getWait() {
+        return wait.get();
+    }
 
     public static synchronized DriverConfig shared() {
         if (sharedInstance == null) {
@@ -33,13 +42,14 @@ public class DriverConfig {
 
     public void defaultConfig() {
         try {
-            driver = new AndroidDriver(
+            AndroidDriver d = new AndroidDriver(
                     new URI("http://127.0.0.1:4723").toURL(),
                     setUpAllCapabilities()
             );
 
-            wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+            this.driver.set(d);
+            this.wait.set(new WebDriverWait(d, Duration.ofSeconds(15)));
+            this.driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
 
         } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
@@ -47,8 +57,10 @@ public class DriverConfig {
     }
 
     public void quitDriver() {
-        if (driver != null) {
-            driver.quit();
+        if (this.driver.get() != null) {
+            this.driver.get().quit();
+            driver.remove();
         }
+        wait.remove();
     }
 }
