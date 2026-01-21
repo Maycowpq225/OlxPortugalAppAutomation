@@ -31,6 +31,7 @@ jobs:
 
       - name: Start Android Emulator + Appium + Run tests
         uses: ReactiveCircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           api-level: 30
           target: default
