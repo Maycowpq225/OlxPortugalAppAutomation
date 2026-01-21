@@ -1,5 +1,5 @@
-name: Run Appium Tests - User Endpoint
-run-name: User Endpoint
+name: Run Appium Tests
+run-name: OlxApp tests
 
 on:
   pull_request:
