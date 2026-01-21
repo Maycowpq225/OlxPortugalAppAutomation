@@ -14,7 +14,7 @@ on:
       TAG:
         description: "Tag to execute"
         required: true
-        default: "Regression"
+        default: "@Regression"
 
 jobs:
   test:
@@ -39,8 +39,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Start Android Emulator + Appium
+      - name: Start Android Emulator + Appium + Run tests
         uses: ReactiveCircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           api-level: 30
           target: default
@@ -53,10 +54,7 @@ jobs:
             appium driver install uiautomator2
             appium --address 127.0.0.1 --port 4723 --log appium.log &
             sleep 5
-            
-      - name: Run tests
-        continue-on-error: true
-        run: mvn clean test -Dcucumber.filter.tags="${{ github.event.inputs.TAG }}"
+            mvn clean test -Dcucumber.filter.tags="${{ github.event.inputs.TAG }}"
 
       - name: Generate Cucumber Report
         if: always()
