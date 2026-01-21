@@ -50,6 +50,7 @@ jobs:
           disable-animations: true
           script: |
             adb devices
+            adb install-multiple apps/base.apk apps/split_config.x86_64.apk apps/split_config.xxhdpi.apk
             npm i -g appium
             appium driver install uiautomator2
             appium --address 127.0.0.1 --port 4723 --log appium.log &
